@@ -44,7 +44,7 @@ export default function Sidebar({ active, setPage, role }) {
       <div style={{ padding: "14px 16px", borderTop: "1px solid #f3f4f6" }}>
         <button
           className="logout-btn"
-          onClick={() => { setCurrentUser(null); setPage("role"); }}
+          onClick={() => { setCurrentUser(null); setPage("login"); }}
         >
           🚪 Logout
         </button>

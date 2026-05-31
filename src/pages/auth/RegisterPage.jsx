@@ -1,71 +1,265 @@
-import { useState, useContext } from "react";
-import { AppContext } from "../../context/AppContext";
+import { useState } from "react";
+import { register } from "../../services/authService";
 
 export default function RegisterPage({ setPage }) {
-  const { setCustomers } = useContext(AppContext);
-  const [form, setForm] = useState({ name: "", email: "", phone: "", room: "", building: "", bag: "", password: "", confirm: "" });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
+  const [form, setForm] = useState({
+    businessName: "",
 
-  const upd = k => e => { setForm(f => ({ ...f, [k]: e.target.value })); setErrors(v => ({ ...v, [k]: "" })); };
+    ownerFullName: "",
+    ownerUsername: "",
+    ownerPassword: "",
+
+    employeeFullName: "",
+    employeeUsername: "",
+    employeePassword: ""
+  });
+
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const upd = (key) => (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [key]: e.target.value
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [key]: ""
+    }));
+  };
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim()) e.name = "Nama wajib diisi";
-    if (!form.email.trim()) e.email = "Email wajib diisi";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Format email tidak valid";
-    if (!form.phone.trim()) e.phone = "Nomor HP wajib diisi";
-    if (!form.room.trim()) e.room = "Nomor kamar wajib diisi";
-    if (!form.building.trim()) e.building = "Nama gedung wajib diisi";
-    if (!form.bag.trim()) e.bag = "Nomor tas wajib diisi";
-    if (!form.password) e.password = "Password wajib diisi";
-    else if (form.password.length < 6) e.password = "Password minimal 6 karakter";
-    if (form.password !== form.confirm) e.confirm = "Password tidak cocok";
+
+    if (!form.businessName.trim())
+      e.businessName = "Nama laundry wajib diisi";
+
+    if (!form.ownerFullName.trim())
+      e.ownerFullName = "Nama owner wajib diisi";
+
+    if (!form.ownerUsername.trim())
+      e.ownerUsername = "Username owner wajib diisi";
+
+    if (!form.ownerPassword.trim())
+      e.ownerPassword = "Password owner wajib diisi";
+
+    if (!form.employeeFullName.trim())
+      e.employeeFullName = "Nama employee wajib diisi";
+
+    if (!form.employeeUsername.trim())
+      e.employeeUsername = "Username employee wajib diisi";
+
+    if (!form.employeePassword.trim())
+      e.employeePassword = "Password employee wajib diisi";
+
     return e;
   };
 
-  const handleRegister = () => {
-    const e = validate();
-    if (Object.keys(e).length) { setErrors(e); return; }
-    setLoading(true);
-    setTimeout(() => {
+  const handleRegister = async () => {
+    const validationErrors = validate();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setApiError("");
+
+      const payload = {
+        businessName: form.businessName,
+
+        ownerUsername: form.ownerUsername,
+        ownerPassword: form.ownerPassword,
+        ownerFullName: form.ownerFullName,
+
+        employeeUsername: form.employeeUsername,
+        employeePassword: form.employeePassword,
+        employeeFullName: form.employeeFullName
+      };
+
+      console.log("REGISTER PAYLOAD:", payload);
+
+      await register(payload);
+
+      setSuccess(
+        "Registrasi laundry berhasil!"
+      );
+
+      setTimeout(() => {
+        setPage("login-admin");
+      }, 1500);
+
+    } catch (error) {
+
+      console.error(error);
+
+      setApiError(
+        error.response?.data?.message ||
+        "Registrasi gagal"
+      );
+
+    } finally {
+
       setLoading(false);
-      setCustomers(prev => [...prev, {
-        id: Date.now(),
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        room: form.room,
-        building: form.building,
-        bagNumber: form.bag,
-        password: form.password,
-        role: "user"
-      }]);
-      setSuccess("Registrasi berhasil! Silakan masuk.");
-      setTimeout(() => setPage("login-user"), 1500);
-    }, 900);
+
+    }
   };
 
   return (
     <div className="auth-wrap">
-      <div className="auth-card" style={{ maxWidth: 520 }}>
-        <div className="auth-logo">👕</div>
-        <h2 className="auth-title">Buat Akun</h2>
-        <p className="auth-sub">Bergabung dengan layanan laundry kami</p>
-        {success && <div className="alert alert-success">{success}</div>}
-        <div className="two-col">
-          <div className="field"><label>Nama Lengkap</label><input placeholder="Ahmad Rizky" value={form.name} onChange={upd("name")} />{errors.name && <div className="err">{errors.name}</div>}</div>
-          <div className="field"><label>Email</label><input type="email" placeholder="you@example.com" value={form.email} onChange={upd("email")} />{errors.email && <div className="err">{errors.email}</div>}</div>
-          <div className="field"><label>No. HP</label><input placeholder="08123456789" value={form.phone} onChange={upd("phone")} />{errors.phone && <div className="err">{errors.phone}</div>}</div>
-          <div className="field"><label>No. Kamar</label><input placeholder="B-204" value={form.room} onChange={upd("room")} />{errors.room && <div className="err">{errors.room}</div>}</div>
-          <div className="field"><label>No. Tas</label><input placeholder="#247" value={form.bag} onChange={upd("bag")} />{errors.bag && <div className="err">{errors.bag}</div>}</div>
-          <div className="field"><label>Gedung</label><input placeholder="Boys Hostel" value={form.building} onChange={upd("building")} />{errors.building && <div className="err">{errors.building}</div>}</div>
-          <div className="field"><label>Password</label><input type="password" placeholder="Min. 6 karakter" value={form.password} onChange={upd("password")} />{errors.password && <div className="err">{errors.password}</div>}</div>
-          <div className="field"><label>Konfirmasi Password</label><input type="password" placeholder="Ulangi password" value={form.confirm} onChange={upd("confirm")} />{errors.confirm && <div className="err">{errors.confirm}</div>}</div>
+      <div
+        className="auth-card"
+        style={{ maxWidth: 700 }}
+      >
+        <div className="auth-logo">🏢</div>
+
+        <h2 className="auth-title">
+          Registrasi Laundry
+        </h2>
+
+        <p className="auth-sub">
+          Buat bisnis laundry beserta akun owner dan employee
+        </p>
+
+        {success && (
+          <div className="alert alert-success">
+            {success}
+          </div>
+        )}
+
+        {apiError && (
+          <div className="alert alert-error">
+            {apiError}
+          </div>
+        )}
+
+        <div className="field">
+          <label>Nama Laundry</label>
+          <input
+            value={form.businessName}
+            onChange={upd("businessName")}
+          />
+          {errors.businessName && (
+            <div className="err">
+              {errors.businessName}
+            </div>
+          )}
         </div>
-        <button className="btn-primary full" onClick={handleRegister} disabled={loading}>{loading ? "Mendaftarkan…" : "Buat Akun"}</button>
-        <div className="auth-link"><button onClick={() => setPage("login-user")}>← Kembali ke login</button></div>
+
+        <h4 style={{ marginTop: 20 }}>
+          Data Owner
+        </h4>
+
+        <div className="two-col">
+          <div className="field">
+            <label>Nama Owner</label>
+            <input
+              value={form.ownerFullName}
+              onChange={upd("ownerFullName")}
+            />
+            {errors.ownerFullName && (
+              <div className="err">
+                {errors.ownerFullName}
+              </div>
+            )}
+          </div>
+
+          <div className="field">
+            <label>Username Owner</label>
+            <input
+              value={form.ownerUsername}
+              onChange={upd("ownerUsername")}
+            />
+            {errors.ownerUsername && (
+              <div className="err">
+                {errors.ownerUsername}
+              </div>
+            )}
+          </div>
+
+          <div className="field">
+            <label>Password Owner</label>
+            <input
+              type="password"
+              value={form.ownerPassword}
+              onChange={upd("ownerPassword")}
+            />
+            {errors.ownerPassword && (
+              <div className="err">
+                {errors.ownerPassword}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <h4 style={{ marginTop: 20 }}>
+          Data Employee
+        </h4>
+
+        <div className="two-col">
+          <div className="field">
+            <label>Nama Employee</label>
+            <input
+              value={form.employeeFullName}
+              onChange={upd("employeeFullName")}
+            />
+            {errors.employeeFullName && (
+              <div className="err">
+                {errors.employeeFullName}
+              </div>
+            )}
+          </div>
+
+          <div className="field">
+            <label>Username Employee</label>
+            <input
+              value={form.employeeUsername}
+              onChange={upd("employeeUsername")}
+            />
+            {errors.employeeUsername && (
+              <div className="err">
+                {errors.employeeUsername}
+              </div>
+            )}
+          </div>
+
+          <div className="field">
+            <label>Password Employee</label>
+            <input
+              type="password"
+              value={form.employeePassword}
+              onChange={upd("employeePassword")}
+            />
+            {errors.employeePassword && (
+              <div className="err">
+                {errors.employeePassword}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <button
+          className="btn-primary full"
+          onClick={handleRegister}
+          disabled={loading}
+        >
+          {loading
+            ? "Mendaftarkan..."
+            : "Daftarkan Pegawai"}
+        </button>
+
+        <div className="auth-link">
+          <button
+            onClick={() => setPage("login")}
+          >
+            ← Kembali ke Login
+          </button>
+        </div>
       </div>
     </div>
   );

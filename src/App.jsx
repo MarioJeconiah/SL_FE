@@ -2,7 +2,6 @@ import { useState } from "react";
 import { AppProvider } from "./context/AppContext";
 import "./styles/global.css";
 
-import RolePage from "./pages/auth/RolePage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 
@@ -17,13 +16,11 @@ import AdminCustomers from "./pages/admin/AdminCustomer";
 import AdminServices from "./pages/admin/AdminServices";
 
 function App() {
-  const [page, setPage] = useState("role");
+  const [page, setPage] = useState("login");
 
   const renderPage = () => {
     switch (page) {
-      case "role": return <RolePage setPage={setPage} />;
-      case "login-user": return <LoginPage role="user" setPage={setPage} />;
-      case "login-admin": return <LoginPage role="admin" setPage={setPage} />;
+      case "login": return <LoginPage setPage={setPage} />;
       case "register": return <RegisterPage setPage={setPage} />;
 
       case "user-dashboard": return <UserDashboard setPage={setPage} />;
