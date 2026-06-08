@@ -32,7 +32,7 @@ export function UserDashboard({ setPage }) {
   const drying = orders.filter(o => o.status === "DRYING").length;
   const ironing = orders.filter(o => o.status === "IRONING").length;
   const ready = orders.filter(o => o.status === "READY").length;
-  const recent = orders.slice(0, 5);
+  const recent = orders.slice().reverse().slice(0, 5);
 
   return (
     <DashboardShell role="user" setPage={setPage} activeNav="user-dashboard">
@@ -68,7 +68,6 @@ export function UserDashboard({ setPage }) {
                 : recent.map(o => (
                   <div key={o.id} className="activity-item">
                     <div>
-                      <div style={{ fontWeight: 500, fontSize: 14 }}>{String(o.id).slice(-5)}</div>
                       <div style={{ fontSize: 12, color: "var(--steel)" }}>{o.customerName} · {o.serviceName || "-"}</div>
                     </div>
                     <div style={{ textAlign: "right", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>

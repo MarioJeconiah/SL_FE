@@ -50,7 +50,7 @@ export function AdminDashboard({ setPage }) {
   }, [reportTab]);
 
   const userCount = customers.length;
-  const recent = orders.slice(0, 5);
+  const recent = orders.slice().reverse().slice(0, 5);
   const pending = orders.filter(o => o.status === "PENDING").length;
   const washing = orders.filter(o => o.status === "WASHING").length;
   const drying = orders.filter(o => o.status === "DRYING").length;
@@ -62,8 +62,9 @@ export function AdminDashboard({ setPage }) {
   const REPORT_TABS = [
     { key: "daily", label: "Harian" },
     { key: "weekly", label: "Mingguan" },
-    { key: "monthly", label: "Bulanan" },
+    { key: "monthly", label: "Semua" },
   ];
+
 
   return (
     <DashboardShell role="admin" setPage={setPage} activeNav="admin-dashboard">
@@ -159,7 +160,6 @@ export function AdminDashboard({ setPage }) {
               : recent.map(o => (
                 <div key={o.id} className="activity-item">
                   <div>
-                    <div style={{ fontWeight: 500, fontSize: 14 }}>{String(o.id).slice(-5)}</div>
                     <div style={{ fontSize: 12, color: "var(--steel)" }}>{o.customerName} · {o.serviceName || "-"}</div>
                   </div>
                   <div style={{ textAlign: "right", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>

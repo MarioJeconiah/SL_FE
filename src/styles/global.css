@@ -145,7 +145,7 @@ tr:last-child td { border-bottom: none; }
 .hero-sub { font-size: 16px; color: var(--on-dark-muted); line-height: 1.6; }
 .hero-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
 
-.hero, .floating-cards, .main > div {width: 100%; }
+.hero, .floating-cards, .main > div {width: 1100px; }
 
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
