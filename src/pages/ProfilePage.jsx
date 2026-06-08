@@ -1,4 +1,5 @@
 import { useApp } from "../hooks/useApp";
+import { DashboardShell } from "../components/DashboardShell";
 
 
 export function ProfilePage({ role, setPage }) {
