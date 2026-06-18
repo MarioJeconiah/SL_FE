@@ -1,6 +1,8 @@
 # 🧺 SmartLaundry
+
 Aplikasi Smart Laundry, tujuannya untuk membantu manajemen sistem usaha laundry lokal, manfaatnya mempermudah pencatatan transaksi, penyimpanan data pelanggan dan hasil transaksi mingguan, harian dan seluruhnya. 
 Framework backend Springboot, Framework frontend React js.
+
 Backend: https://github.com/MarioJeconiah/SL_API
 ---
 ## Teknologi
