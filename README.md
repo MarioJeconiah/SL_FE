@@ -4,6 +4,7 @@ Aplikasi Smart Laundry, tujuannya untuk membantu manajemen sistem usaha laundry 
 Framework backend Springboot, Framework frontend React js.
 
 Backend: https://github.com/MarioJeconiah/SL_API
+
 ---
 ## Teknologi
 - **Frontend:** React 18 + Vite
