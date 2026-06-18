@@ -1,16 +1,48 @@
-# React + Vite
+# 🧺 SmartLaundry
+Aplikasi Smart Laundry, tujuannya untuk membantu manajemen sistem usaha laundry lokal, manfaatnya mempermudah pencatatan transaksi, penyimpanan data pelanggan dan hasil transaksi mingguan, harian dan seluruhnya. 
+Framework backend Springboot, Framework frontend React js.
+Backend: https://github.com/MarioJeconiah/SL_API
+---
+## Teknologi
+- **Frontend:** React 18 + Vite
+- **Backend:** Spring Boot + JWT
+- **HTTP Client:** Axios
+---
+## Instalasi
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+```bash
+# Frontend
+cd frontend
+npm install
+npm run dev
 
-Currently, two official plugins are available:
+# Backend
+cd backend
+./mvnw spring-boot:run
+```
+---
+## Konfigurasi
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Buat `.env` di folder `SL_FE/`:
 
-## React Compiler
+```env
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+---
+## Fitur
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Fitur | Owner | Karyawan |
+|-------|:-----:|:--------:|
+| Dashboard | ✅ | ✅ |
+| Laporan | ✅ | ✅ |
+| Kelola Transaksi | ✅ | ✅ |
+| Hapus Transaksi | ✅ | ❌ |
+| Kelola Pelanggan | ✅ | ✅ |
+| Kelola Layanan | ✅ | ❌ |
+| Edit Profil Bisnis | ✅ | ❌ |
+---
+## Link Website
+https://sl-fe-rqsk.vercel.app/
+---
+## Link Video
+https://drive.google.com/file/d/1RTTyRGBN9W_soP9MelcEzBABiNsjyzy7/view
